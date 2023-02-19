@@ -1,0 +1,61 @@
+// complexity O(V+E)
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void ZeroOneBFS(int src, unordered_map<int,vector<pair<int,int>>> &adj,int &v){
+
+    vector<int> dist(v,INT_MAX);
+    dist[src]= 0;
+
+    deque<int> q;
+    q.push_back(src);
+
+    while(!q.empty()){
+        int front = q.front();
+        q.pop_front();
+
+        for(auto x: adj[front]){
+            if(dist[front] + x.second < dist[x.first]){
+                dist[x.first] = dist[front] + x.second;
+
+                if(x.second == 0){
+                    q.push_front(x.first);
+                }
+                else{
+                    q.push_back(x.first);
+                }
+            }
+        }
+    }
+
+
+    //printing
+    cout<<"\nEdges  Distance\n";
+    for(int i=0;i<v;i++){
+        cout<<src<<"->"<<i<<" : "<<dist[i]<<endl;
+    }cout<<endl;
+}
+int main(){
+
+    int ve,e;
+    cout<<"V & E: ";
+    cin>>ve>>e;
+
+    unordered_map<int,vector<pair<int,int>>> adj;
+    cout<<"Enter Edges with Weights: \n";
+    for(int i=0;i<e;i++){
+        int u,v,w;
+        cin>>u>>v>>w;
+
+        adj[u].push_back({v,w});
+        adj[v].push_back({u,w});
+
+    }
+
+    ZeroOneBFS(0,adj,ve);      //passing source src   
+
+
+    return 0;
+}
