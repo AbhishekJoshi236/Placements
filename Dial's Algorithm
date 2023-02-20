@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void dials(vector<pair<int,int>> adj[],int n,int k){
+    vector<queue<int>> dq(k*n);
+    dq[0].push(0);
+    vector<int> dis(n,INT_MAX);
+    vector<int> vis(n,false);
+    dis[0]=0;
+    for(int i=0;i<k*n;i++){
+        while(!dq[i].empty()){
+            int a=dq[i].front();
+            dq[i].pop();
+            if(vis[a]==true){
+                continue;
+            }
+            dis[a]=i;
+            vis[a]=true;
+            for(auto c:adj[a]){
+                if(!vis[c.first]){
+                    int d=dis[a]+c.second;
+                    dq[d].push(c.first);
+                }
+            }
+        }
+    }
+    
+
+    for(int i=0;i<dis.size();i++){
+        cout<<dis[i]<<" ";
+    }
+
+}
+
+int main(){
+    int n,e;
+    cin>>n>>e;
+    int k=100;
+    vector<pair<int,int>> adj[n];
+    for(int i=0;i<e;i++){
+        int u,v,w;
+        cin>>u>>v>>w;
+        adj[u].push_back({v,w});
+        adj[v].push_back({u,w});
+    }
+
+    dials(adj,n,k);
+}
